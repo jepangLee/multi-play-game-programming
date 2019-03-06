@@ -140,4 +140,4 @@
       - www.use.edu - 128.125.253.146
       - www.mit.edu - 23.193.142.184
   - 패킷 구조
-  - ![IPv4 패킷 구조](https://github.com/jepangLee/multi-play-game-programming/blob/master/image/picture_2.PNG)
+    ![IPv4 패킷 구조](https://github.com/jepangLee/multi-play-game-programming/blob/master/image/picture_2.PNG)
