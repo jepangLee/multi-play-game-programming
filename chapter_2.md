@@ -78,6 +78,7 @@
         - 해당 장비는 과거 확장카드 현태로 만들어 졌지만 오늘날은 메인보드에 내장하여 출시한다.
         - 단, 두가지 이상의 네트워크를 연결해야 하는 등의 경우에는 확장 카드를 장착하면 된다.
     ![TCP/IP 스택](https://github.com/jepangLee/multi-play-game-programming/blob/master/image/picture_1.PNG)
+    
     그림 2) 이더넷 패킷 구조
     - 0 ~ 7byte 
       - NIC가 이진수 패턴을 체크하여 동기화를 맞추고, 새 프레임을 받을 준비를 한다.
