@@ -140,9 +140,11 @@
       - www.use.edu - 128.125.253.146
       - www.mit.edu - 23.193.142.184
 
-  - IPv4패킷 구조
+  - IPv4패킷
 
     ![IPv4 패킷 구조](https://github.com/jepangLee/multi-play-game-programming/blob/master/image/picture_1.PNG)
+    
+    그림 3) IPv4 패킷 구조
     - 버전 : 해당 패킷을 지원하는 IP의 버전을 표시한다. ex) IPv4 : 4
     
     - 헤더 길이
@@ -171,6 +173,6 @@
     - 발신지 주소
     - 목적지 주소
       - 특수 주솟값을 사용하면 여러 호스트에 동시에 패킷을 보낼 수 있다.
-  - 직접 라우팅과 주소 결정 프로토콜(ARP)
-    - IP주소기반의 IPv4는 네트워크 계층의 개념이기에 IP주소만으로는 패킷을 전송할 수 없다.
-    - 따라서 
+  - 주소 결정 프로토콜(ARP)
+    - 네트워크 계층의 IP를 링크 계층에 맞게 MAC주소로 변환하는 프로토콜
+    - 
