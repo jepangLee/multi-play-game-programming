@@ -5,7 +5,9 @@
 - 총 4단계로 구성되어 있다.
 
     ![TCP/IP 스택](https://thebook.io/img/006821/045_01.jpg)
+
     그림 1) 게임 개발 관점에서 나눈 TCP/IP 계층 
+
 ## 2. 물리 계층(physical layer)
 
 - 계층 가장 아래에 위치하였다.
@@ -51,8 +53,6 @@
   | 광케이블 | FDDI(fiber distributed data interface, 광섬유 분산 데이터 인터페이스), 이더넷 10G BASE-SR, 이더넷 10G BASE-LR|
   | 동축 케이블(Coaxial cable) | 동축 이더넷 (Ethernet over coax, EoC), DOCSIS(data over cable service interface specification) |
 
-  
-
    표 1) 물리 매체와 그에 대응하는 링크 계층 프로토콜
 
   - 링크 계층과 물리계층은 서로 밀접하게 연관되어있다 보니 일부 모형에는 하나의 계층으로 묘사하기도 한다. 
@@ -78,9 +78,11 @@
 
 - 해당 장비는 과거 확장카드 현태로 만들어 졌지만 오늘날은 메인보드에 내장하여 출시한다.
 - 단, 두가지 이상의 네트워크를 연결해야 하는 등의 경우에는 확장 카드를 장착하면 된다.
+- 
     ![TCP/IP 스택](/image/picture_1.PNG)
 
   그림 2) 이더넷 패킷 구조
+  
 - 0 ~ 7byte 
   - NIC가 이진수 패턴을 체크하여 동기화를 맞추고, 새 프레임을 받을 준비를 한다.
   - 프리앰블(preamble) : 0 ~ 6byte
