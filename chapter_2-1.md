@@ -1,6 +1,8 @@
 # 멀티 플레이어 게임 프로그래밍
 
-## 1. TCP/IP 스택의 계층 구조
+## 2. 네트워크
+
+### 1. TCP/IP 스택의 계층 구조
 
 ---
 
@@ -8,9 +10,9 @@
 
     ![TCP/IP 스택](https://thebook.io/img/006821/045_01.jpg)
 
-    그림 1) 게임 개발 관점에서 나눈 TCP/IP 계층 
+    그림 2-1) 게임 개발 관점에서 나눈 TCP/IP 계층 
 
-## 2. 물리 계층(physical layer)
+### 2. 물리 계층(physical layer)
 
 ---
 
@@ -26,7 +28,7 @@
     - TP CAT-6케이블
     - 전파 등
 
-## 3. 링크 계층(link layer)
+### 3. 링크 계층(link layer)
 
 ---
 
@@ -55,12 +57,12 @@
   | 광케이블 | FDDI(fiber distributed data interface, 광섬유 분산 데이터 인터페이스), 이더넷 10G BASE-SR, 이더넷 10G BASE-LR|
   | 동축 케이블(Coaxial cable) | 동축 이더넷 (Ethernet over coax, EoC), DOCSIS(data over cable service interface specification) |
 
-   표 1) 물리 매체와 그에 대응하는 링크 계층 프로토콜
+   표 2-1) 물리 매체와 그에 대응하는 링크 계층 프로토콜
 
   - 링크 계층과 물리계층은 서로 밀접하게 연관되어있다 보니 일부 모형에는 하나의 계층으로 묘사하기도 한다. 
   - 하지만 하나 이상의 링크 계층 프로토콜을 지원하는 물리적 매체도 있으므로 서로 구별하는 편이 좋다.
 
-### 이더넷/802.3
+#### 이더넷/802.3
 
 ---
 
@@ -85,9 +87,9 @@
 
 이더넷 패킷 구조
 
-  ![TCP/IP 스택](/image/picture_1.png)
+  ![TCP/IP 스택](/image/picture_2-1.png)
 
-  그림 2) 이더넷 패킷 구조도
+  그림 2-2) 이더넷 패킷 구조도
   
 - 0 ~ 7byte 
   - NIC가 이진수 패턴을 체크하여 동기화를 맞추고, 새 프레임을 받을 준비를 한다.
