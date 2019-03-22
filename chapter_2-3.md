@@ -1,10 +1,10 @@
 # 멀티 플레이어 게임 프로그래밍
 
-## 2. 네트워크
+# 2. 네트워크
 
-### 4. 네트워크 계층(network layer)
+## 4. 네트워크 계층(network layer)
 
-#### IPv6 (Internet Protocol version 6)
+### IPv6 (Internet Protocol version 6)
 
 - IPv4의 고갈과 여러 문제들을 해소하기 위해 고안되었다.
 
@@ -27,7 +27,7 @@
     | 할당할 수 있는 IP주소 개수 | 4,294,967,296 | 340,282,366,920,938,463,463<br />,374,607,431,768,211,456 |
     | 링크 계층 변환 프로토콜 | ARP | NDP |
 
-### 5. 전송 계층
+## 5. 전송 계층
 
 - 호스트상 개별 프로세스 사이의 통신을 가능케 한다.
  
@@ -50,7 +50,7 @@
     - 프로세스를 구현할 때 동적 포트에 바인딩을 시도했다가 이미 사용 중인 것을 알게 되면 비어있는 포트를 찾을 때 까지 다른 동적 포트에 바인딩을 시도해야 한다.
 - 포트가 정해지면 전송 계층 프로토콜을 통해 실제 데이터를 보낸다.
   
-#### UDP (User datagram protocol)
+### UDP (User datagram protocol)
 
 ---
 
@@ -75,7 +75,7 @@
     - UDP 헤더와 페이로드, 그리고 IP 헤더 몇몇 필드를 엮어 계산한 체크섬 값이다.
     - 필 수 사항은 아니다.
 
-#### TCP (Transmission control protocol)
+### TCP (Transmission control protocol)
 
 ---
 
