@@ -100,3 +100,69 @@
 
   코드 3-1) sockaddr_in 구조체 초기화하기
 
+### inet_pton() & inetPton()
+- 문자열을 sockaddr로 변환하여 넣는 함수이다.
+
+- POSIX 계열은 inet_pton()를, 윈도우는 inetPton()를 사용한다.
+
+        sockaddr_in myAddr;
+        myAddr.sin_family = AF_INET;
+        myAddr.sin_port = hton(80);
+        InetPton(AF_INET, "65.254.248.180", &myAddr.sin_addr);
+        //Inet_pton(AF_INET, "65.254.248.180", &myAddr.sin_addr);
+- Inet_pton()는 IP 주소 형태의 문자열만 처리할 수 있다. 즉, 도메인 네임이나 DNS 조회 등은 수행하지 않는다.
+
+### getaddrinfo()
+- POSIX 계열에서 DNS 질의를 수행해 도메인 네임을 IP 주소로 변환할때 사용한다. 
+
+        int getaddrinfo(const char* hostname, const char* servname,
+            const addrinfo* hints, addrinfo** res);
+
+    - hostname : null 종료 문자열로 도메인 조회를 할 이름 문자열을 가리켜야 한다.
+
+        ex) "live-shore.herokuapp.com"
+    - servname : port 번호 또는 서비스 이름을 널 종료 문자열로 지정해야 한다.
+
+        ex) http -> 80
+
+    - hints 
+        - 호출자가 어떤 정보를 받고 싶은지를 기재해 둔 addrinfo 구조체 포인터를 넘긴다.
+        - 원하는 주소 패밀리나 다른 요구 사항을 지정해 호출할 수 있다.
+        - 그냥 모든 결과글 받으려는 경우엔 nullptr를 넘기면 된다.
+
+    - res 
+        - 해당 변수로 지정된 포인터 주소로 결과가 반환된다.
+        - 여러 개의 결과가 있을 수 있으므로 연결 리스트로 반환되고, 해당 변수는 그 첫째 원소가 된다.
+        - DNS서버의 조회 결과가 담겨온다.
+
+### addrinfo
+- getaddinfo()함수의 결과값에 사용된다.
+
+        struct addrinfo {
+            int         ai_flags;
+            int         ai_family;
+            int         ai_socktype;
+            int         ai_protocol;
+            size_t      ai_addrlen;
+            char*       ai_canon_name;
+            sockaddr*   ai_addr;
+            addinfo*    ai_next;
+        }
+            
+    - ai_flags & ai_socktype & ai_protocol : hint에 요구 사항을 정의할 때 사용한다.
+    
+    - ai_family 
+        - addrinfo에 관련된 주소 패밀리는 나타낸다.
+        - IPv4 - AF_INET, IPv6 - AF_IENT6
+    - ai_addrlen : ai_addr이 가리키는 sockaddr의 길이 값이다.
+
+    - ai_caonon_name 
+        - getaddrinfo()함수 호출할 때 hints의 ai_flags 필드에 AI_CANONNAME 플래그를 설정된 경우에만 사용된다.
+        - resolve된 호스트명의 대표이름(canonical, CNAME)를 담는다.
+    - ai_addr
+        - 해당 주소 패밀리의 sockaddr을 담고 있다.
+        - 이 주소는 getaddrinfo()호출 시 지정한 hostname과 servname, 즉 호슽트명과 포트 조합이 가리키는 주소를 나타낸다.
+    - ai_next 
+        - 연결 리스트상 다음 addrinfo를 가리킨다.
+        - 연결 리스트상 마지막 
+
