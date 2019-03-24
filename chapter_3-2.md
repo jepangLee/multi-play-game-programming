@@ -16,7 +16,7 @@
 - sa_family 
     - 주소의 종류를 나타내는 상숫값이다.
     
-    - 소켓을 생성할 때 사용했던 af변수와 값이 일치해야 한다.
+    - 소켓을 생성할 때 사용했던 af와 값이 일치해야 한다.
 
 - sa_data
     - sa_family값에 따른 주소를 담는다.
@@ -101,8 +101,8 @@
   코드 3-1) sockaddr_in 구조체 초기화하기
 
 ### inet_pton() & inetPton()
-- 문자열을 sockaddr로 변환하여 넣는 함수이다.
 
+- 문자열을 sockaddr로 변환하여 넣는 함수이다.
 - POSIX 계열은 inet_pton()를, 윈도우는 inetPton()를 사용한다.
 
         sockaddr_in myAddr;
@@ -164,5 +164,66 @@
         - 이 주소는 getaddrinfo()호출 시 지정한 hostname과 servname, 즉 호슽트명과 포트 조합이 가리키는 주소를 나타낸다.
     - ai_next 
         - 연결 리스트상 다음 addrinfo를 가리킨다.
-        - 연결 리스트상 마지막 
+        - 연결 리스트상 마지막 항목의 해당 변수는 nullptr가 되어 마지막임을 나타낸다.
 
+### freeaddrinfo()
+- getaddinfo()의 결과값으로 할당된 구조체의 메모리를 해제할때 사용된다.
+
+        void freeaddrinfo(addinfo* ai);
+
+        ai : getaddinfo()에서 받은 addrinfo 연결리스트 중 가장 첫번째 항목을 넘긴다.
+
+### GetaddrInfoEx()
+- 호스트네임을 IP 주소를 resolve, 즉 해석하기 위해, getaddrinfo()함수는 운영체제에 설정된 대로 DNS 프로토콜 패킷을 만든 다음 UDP나 TCP로 DNS 서버에 보내게 된다.
+- 이후 응답받기를 기다렸다가 파싱하여 addinfo 구조체의 연결리스트를 만들어 이것을 호출자에게 돌려준다.
+- 이 과정에서 원격 호스트에 정보를 보내고 받는 단계가 포함되므로 시간이 많이 지체될 수 있다. 대개는 초단위의 지연이 수반될 수 있다.
+- getaddrinfo()에는 비동기 동작을 하게끔 하는 옵션이 없으므로 호출 스레드는 응답을 받을 때 까지 마냥 블로킹되어 있어야 한다.
+- 이는 사용자 입장에서 바람직하지 않으므로 호스트네임을 Ip 주소로 리졸브할 일이 있다면, getaddrinfo()가 메인 스레드를 붙잡고 있지 않도록 별도의 스레드에서 돌리는 방안을 생각해야 한다.
+- 윈도우에서는 해당 함수를 사용하는데 이 함수에는 스레드를 따로 만들지 않아도 비동기식으로 동작하도록 하는 옵션이 있다.
+
+### getaddrinfo()함수 캡슐화 하기
+
+    class SocketAddressPactory {
+
+    public:
+        static SocketAddressPtr CreateIPv4FromString (const string& inString)
+        {
+            auto pos = inString.find_last_of(":");
+            string host, service;
+            if (string::npos != pos) {
+                host = inString.substr(0, pos);
+                service = inString.substr(pos + 1);
+            }
+            else {
+                // 포트가 정해지지 않았음 -> default 사용
+                host = inString;
+                service = "0";
+            }
+            addrinfo hint;
+            memset(&hint, 0, sizeof(hint));
+            hint.ai_family = AF_INET;
+
+            addrinfo* result = nullptr;
+            int error = getaddrinfo(host.c_str(), service.c_str, &hint, &result);
+            addrinfo* initResult = result;
+
+            if (NULL != error && nullptr != result) {
+                freeaddrinfo(initResult);
+                return nullptr;
+            }
+
+            while (NULL == (result->ai_addr && result->ai_next) ) {
+                result = result->ai_next;
+            }
+
+            if (NULL == result->ai_addr) {
+                freeaddrinfo(initResult);
+                return nullptr;
+            }
+
+            auto toRet = std::make_shared<SocketAddress>(*result->ai_addr);
+
+            freeaddrinfo(initResult);
+            return toRet;
+        }
+    };
