@@ -4,7 +4,7 @@
 
 ## 3. 소켓 주소
 ---
-### 1. sockaddr
+### sockaddr
 
 - 네트워크 계층에서 필요한 송수신지 주소, 포트 정보를 담은 struct이다.
 
@@ -25,8 +25,7 @@
 - 다양한 주소 패밀리의 메모리 레이아웃을 알아야한다는 단점이 있다.
     
     
-### 2. sockaddr_in
-
+### sockaddr_in
 - sockadd의 단점 보안하기 위해 널리 쓰이는 주소 패밀리인 IPv4에 딱 맞게 정의된 전용 자료형이다.
 
 
@@ -68,8 +67,7 @@
     - 사용하지 않지만 struct크기를 sockaddr과 맞추기 위한 패딩값이다.
     - 일관성 유지를 위해 값을 0으로 채워야 한다.
 
-### 3. htons() & htonl()
-   
+### htons() & htonl()
 - host byte 순서로 된 된 숫자를 network byte 순서 체계로 변환해 주는 함수다.
 
         uint16_t htons(uint16_t hostshort);
@@ -78,8 +76,7 @@
 - 각각 부호없는 16비트 정수, 부호없는 32비트 정수에 사용된다.
 - host byte 순서와 network byte 순서가 같은 플렛폼에서는 아무런 동작을 하지 않는다.
 
-### 4. ntohs() & ntohl()
-
+### ntohs() & ntohl()
 - network byte 순서로 된 숫자를 host byte 순서 체계로 변환해 주는 함수다.
 
         uint16_t ntohs(uint16_t networkshort);
@@ -98,11 +95,41 @@
       myAddr.sin_addr.S_un.S_un_b.s_b3 = 248;
       myAddr.sin_addr.S_un.S_un_b.s_b4 = 180;
 
-  코드 3-1) sockaddr_in 구조체 초기화하기
+    코드 3-1) sockaddr_in 구조체 초기화하기
+
+### sockaddr 자료형 안정성 확보
+
+    class SocketAddress
+    {
+    public:
+        SocketAddress(uint32_t inAddress, uint16_t inPort)
+        {
+            this->GetAsSockAddrIn()->sin_family = AF_INET;
+            this->GetAsSockAddrIn()->sin_addr.S_un.S_addr = htonl(inAddress);
+            this->GetAsSockAddrIn()->sin_port = htons(inPort);
+        }
+        SocketAddress(const sockaddr& inSockAddr)
+        {
+            memcpy(&mSockAddr, &inSockAddr, sizeof(sockaddr));
+        }
+
+        size_t GetSize() const { return sizeof(sockaddr); }
+
+    private:
+        sockaddr mSockAddr;
+        sockaddr_in* GetAsSockAddrIn()
+        {
+            return reinterpret_cast<sockaddr_in*>(&mSockAddr);
+        }
+    };
+
+    using SocketAddressPtr = shared_ptr<SocketAddress>;
+
+    코드 3-2) 자료형 안정성이 확보된 SocketAddress 클래스
 
 ### inet_pton() & inetPton()
-
 - 문자열을 sockaddr로 변환하여 넣는 함수이다.
+
 - POSIX 계열은 inet_pton()를, 윈도우는 inetPton()를 사용한다.
 
         sockaddr_in myAddr;
@@ -110,6 +137,8 @@
         myAddr.sin_port = hton(80);
         InetPton(AF_INET, "65.254.248.180", &myAddr.sin_addr);
         //Inet_pton(AF_INET, "65.254.248.180", &myAddr.sin_addr);
+
+    코드 3-3) InetPton(Inet_pton)으로 sockaddr 초기화하기
 - Inet_pton()는 IP 주소 형태의 문자열만 처리할 수 있다. 즉, 도메인 네임이나 DNS 조회 등은 수행하지 않는다.
 
 ### getaddrinfo()
@@ -155,7 +184,6 @@
         - addrinfo에 관련된 주소 패밀리는 나타낸다.
         - IPv4 - AF_INET, IPv6 - AF_IENT6
     - ai_addrlen : ai_addr이 가리키는 sockaddr의 길이 값이다.
-
     - ai_caonon_name 
         - getaddrinfo()함수 호출할 때 hints의 ai_flags 필드에 AI_CANONNAME 플래그를 설정된 경우에만 사용된다.
         - resolve된 호스트명의 대표이름(canonical, CNAME)를 담는다.
@@ -171,68 +199,4 @@
 
         void freeaddrinfo(addinfo* ai);
 
-        ai : getaddinfo()에서 받은 addrinfo 연결리스트 중 가장 첫번째 항목을 넘긴다.
-
-### GetaddrInfoEx()
-
-- 호스트네임을 IP 주소를 resolve, 즉 해석하기 위해, getaddrinfo()함수는 운영체제에 설정된 대로 DNS 프로토콜 패킷을 만든 다음 UDP나 TCP로 DNS 서버에 보내게 된다.
-
-- 이후 응답받기를 기다렸다가 파싱하여 addinfo 구조체의 연결리스트를 만들어 이것을 호출자에게 돌려준다.
-- 이 과정에서 원격 호스트에 정보를 보내고 받는 단계가 포함되므로 시간이 많이 지체될 수 있다. 대개는 초단위의 지연이 수반될 수 있다.
-- getaddrinfo()에는 비동기 동작을 하게끔 하는 옵션이 없으므로 호출 스레드는 응답을 받을 때 까지 마냥 블로킹되어 있어야 한다.
-- 이는 바람직하지 않으므로 호스트네임을 Ip 주소로 리졸브할 일이 있다면, getaddrinfo()가 메인 스레드를 붙잡고 있지 않도록 별도의 스레드에서 돌리는 방안을 생각해야 한다.
-- 윈도우에서는 해당 함수를 사용하는데 이 함수에는 스레드를 따로 만들지 않아도 비동기식으로 동작하도록 하는 옵션이 있다. 따라서 윈도우에선 이 함수를 사용하자
-
-### getaddrinfo()함수 캡슐화 하기
-
-    class SocketAddressPactory {
-
-    public:
-        static SocketAddressPtr CreateIPv4FromString (const string& inString)
-        {
-            auto pos = inString.find_last_of(":");
-            string host, service;
-            if (string::npos != pos) {
-                host = inString.substr(0, pos);
-                service = inString.substr(pos + 1);
-            }
-            else {
-                // 포트가 정해지지 않았음 -> default 사용
-                host = inString;
-                service = "0";
-            }
-            addrinfo hint;
-            memset(&hint, 0, sizeof(hint));
-            hint.ai_family = AF_INET;
-
-            addrinfo* result = nullptr;
-            int error = getaddrinfo(host.c_str(), service.c_str, &hint, &result);
-            addrinfo* initResult = result;
-
-            if (NULL != error && nullptr != result) {
-                freeaddrinfo(initResult);
-                return nullptr;
-            }
-
-            while (NULL == (result->ai_addr && result->ai_next) ) {
-                result = result->ai_next;
-            }
-
-            if (NULL == result->ai_addr) {
-                freeaddrinfo(initResult);
-                return nullptr;
-            }
-
-            auto toRet = std::make_shared<SocketAddress>(*result->ai_addr);
-
-            freeaddrinfo(initResult);
-            return toRet;
-        }
-    };
-
-  - getaddrinfo()가 에러를 반환했거나 result값이 NULL이거나, result의 ai_addr의 값이 NULL인 경우 등에 대한 예외처리를 하여 확실히 유효한 SocketAddress객체만을 반환하게 만든 코드이다.
-  
-  - 우선 inString에서 :를 찾아 포트 번호를 분리한다.
-  - hint로 쓸 addrinfo 구조체를 만들어, IPv4 결과만 리턴되도록 한다.
-  - 이들 인자를 getaddrinfo()에 넘긴 뒤 리스트를 순회하여 NULL이 아닌 주소를 찾는다.
-  - 찾은 주소를 뽑아 SockAddress의 적당한 생성자로 객체를 생성한뒤 리스트는 헤제한다.
+    ai : getaddinfo()에서 받은 addrinfo 연결리스트 중 가장 첫번째 항목을 넘긴다.
