@@ -139,9 +139,10 @@
         - 버퍼 오버플로 에러를 방지하기 위해 recvfrom()은 여기에 지정된 숫자 이상의 바이트는 복사하지 않는다.
     - flog
         - 데이터 수신을 제어하는 비트 플래그이다.
-        - MSG_PEEK : 이 값으로 지정되면 수신된 데이터그램을 buf에 복사한 다음 데이터그램을 입력 대기열에서 제거하지 않는다. 
+        - MSG_PEEK 
+            - 이 값으로 지정되면 수신된 데이터그램을 buf에 복사한 다음 데이터그램을 입력 대기열에서 제거하지 않는다. 
         
-            -> 다음번 recvfrom()호출에서 더 큰 버퍼를 할당해 같은 데이터그램을 다시 받아볼 수 있다.
+              -> 다음번 recvfrom()호출에서 더 큰 버퍼를 할당해 같은 데이터그램을 다시 받아볼 수 있다.
         
         - 대부분의 게임코드에서 이 값은 0이면 충분하다.
 
@@ -154,4 +155,64 @@
         - 실패 : -1
 
 ### UDP 소켓 자료형 안전성 보강
+
+    class UDPSocket
+    {
+    public:
+        ~UDPSocket();
+        int Bind(const SocketAddress& inBindAddress);
+        int SendTo(const void* inData, int inLen, const SocketAddress& inTo);
+        int ReceiveFrom(void* inBuffer, int inLen, SocketAddress& ourFrom);
+
+    private:
+        friend class SocketUtil;
+        UDPSocket(SOCKET inSocket) : mSocket(inSocket) {}
+        SOCKET mSocket;
+    };
+
+    using UDPSocketPtr = shared_ptr<UDPSocket>;
+
+    int UDPSocket::Bind(const SocketAddress & inBindAddress)
+    {
+        int err = bind(this->mSocket, &inBindAddress.mSockAddr ,inBindAddress.GetSize() );
+
+        if (err == 0)
+            return NO_ERROR;
+
+        SocketUtil::ReportError(L"UDPSocket::bind");
+        return SocketUtil::GetLastError();
+    }
+
+    int UDPSocket::SendTo(const void * inData, int inLen, const SocketAddress & inTo)
+    {
+        int byteSentCount = sendto(mSocket, static_cast<const char*>(inData),
+                                    inLen, 0, &inTo.mSockAddr, inTo.GetSize());
+
+        if (0 <= byteSentCount)
+            return byteSentCount;
+
+        //에러코드를 음수로 반환함
+        SocketUtil::ReportError(L"UDPSocket::SendTO");
+        return -SocketUtil::GetLastError();
+
+    }
+
+    int UDPSocket::ReceiveFrom(void * inBuffer, int inMaxLengh, SocketAddress & outFrom)
+    {
+        int fromLength = outFrom.GetSize();
+        int readByteCount = recvfrom(mSocket, static_cast<char*>(inBuffer), 
+                                      inMaxLengh, 0, &outFrom.mSockAddr, &fromLength);
+        if (readByteCount >= 0)
+            return readByteCount;
+
+        SocketUtil::ReportError(L"UDPSocket::ReceiveFrom");
+        return -SocketUtil::GetLastError();
+    }
+
+    UDPSocket::~UDPSocket()
+    {
+        closesocket(this->mSocket);
+    }
+
+코드 3-5) 자료형 안전성을 보강한 UDPSocket 클래스
 
