@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SOCKET_ADDRESS_H
+#define SOCKET_ADDRESS_H
+
 
 #include "pch.h"
 
@@ -17,3 +19,5 @@ private:
 };
 
 using SocketAddressPtr = std::shared_ptr<SocketAddress>;
+
+#endif

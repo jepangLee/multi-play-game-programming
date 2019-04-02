@@ -29,5 +29,18 @@ UDPSocketPtr SocketUtil::CreateUDPSocket(SocketAddressFamily inFamily)
 	if (INVALID_SOCKET != s)
 		return UDPSocketPtr(new UDPSocket(s));
 
-	
+	this->SU_ReportError(L"SocketUtil::CreateUDPSocket");
+	return nullptr;
+
+}
+
+TCPSocketPtr SocketUtil::CreateTCPSocket(SocketAddressFamily inFamily)
+{
+	SOCKET s = socket(inFamily, SOCK_STREAM, IPPROTO_TCP);
+	if (INVALID_SOCKET != s)
+		return TCPSocketPtr(new TCPSocket(s));
+
+	this->SU_ReportError(L"SocketUtil::CreateUDPSocket");
+	return nullptr;
+
 }
