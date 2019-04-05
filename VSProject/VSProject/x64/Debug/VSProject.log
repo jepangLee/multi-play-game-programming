@@ -1,2 +1,13 @@
-﻿  TCPSocket.cpp
+﻿  SocketUtil.cpp
+  TCPSocket.cpp
+c:\users\ljsun\onedrive\dsm\pg_gameserver\multi-play-game-programming\vsproject\vsproject\tcpsocket.cpp(11): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  UDPSocket.cpp
+c:\users\ljsun\onedrive\dsm\pg_gameserver\multi-play-game-programming\vsproject\vsproject\udpsocket.cpp(6): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\ljsun\onedrive\dsm\pg_gameserver\multi-play-game-programming\vsproject\vsproject\udpsocket.cpp(18): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\ljsun\onedrive\dsm\pg_gameserver\multi-play-game-programming\vsproject\vsproject\udpsocket.cpp(31): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  main.cpp
+  코드를 생성하고 있습니다...
+  SocketAddress.cpp
+  SocketAddressFactory.cpp
+  코드를 생성하고 있습니다...
   VSProject.vcxproj -> C:\Users\ljsun\OneDrive\dsm\PG_GameServer\multi-play-game-programming\VSProject\x64\Debug\VSProject.exe

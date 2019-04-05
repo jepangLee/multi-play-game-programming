@@ -14,6 +14,7 @@ public:
 
 private:
 	friend class UDPSocket;
+	friend class TCPSocket;
 	sockaddr mSockAddr;
 	sockaddr_in* GetAsSockAddrIn();
 };

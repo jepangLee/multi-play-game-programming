@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "TCPSocket.h"
+#include "SocketUtil.h"
 
 
 TCPSocket::~TCPSocket()
@@ -8,17 +8,29 @@ TCPSocket::~TCPSocket()
 
 int TCPSocket::Connect(const SocketAddress & inAddress)
 {
-	return 0;
+	int err = connect(this->mSocket, &inAddress.mSockAddr, inAddress.GetSize());
+	if (err >= 0)
+		return NO_ERROR;
+
+	SocketUtil::SU_ReportError(L"TCPSocket::Connet");
+	return -SocketUtil::SU_GetLastError();
 }
 
 int TCPSocket::Bind(const SocketAddress & inToAddress)
 {
-	return 0;
+	
+
 }
 
 int TCPSocket::Listen(int inBackLog)
 {
-	return 0;
+	int err = listen(this->mSocket, inBackLog);
+
+	if (err >= 0)
+		return NO_ERROR;
+
+	SocketUtil::SU_ReportError(L"TCPSocket::Listen");
+	return -SocketUtil::SU_GetLastError();
 }
 
 TCPSocketPtr TCPSocket::Accept(SocketAddress & inFromAddress)

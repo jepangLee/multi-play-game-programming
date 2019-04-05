@@ -4,8 +4,9 @@
 #include "SocketAddress.h"
 
 class SocketUtil;
+class TCPSocket;
 
-
+using TCPSocketPtr = shared_ptr<TCPSocket>;
 
 class TCPSocket
 {
@@ -22,5 +23,6 @@ private:
 	TCPSocket(SOCKET inSocket) : mSocket(inSocket) {}
 	SOCKET mSocket;
 };
+
 
 #endif
