@@ -13,7 +13,7 @@ class TCPSocket
 public:
 	~TCPSocket();
 	int			 Connect(const SocketAddress& inAddress);
-	int			 Bind(const SocketAddress& inToAddress);
+	int			 Bind(const SocketAddress& inBindAddress);
 	int			 Listen(int inBackLog = 32);
 	TCPSocketPtr Accept(SocketAddress& inFromAddress);
 	int			 Send(const void* inData, int inLen);
