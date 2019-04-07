@@ -106,4 +106,100 @@
 - send()의 len에 0를 넣어 보냈는데 recv()가 0을 리턴되면, 소켓에서 읽을 것이 있다는 뜻이다. 
 - 위 방법으로 소켓이 읽은 준비가 되었는지를 확인 해 볼 수 있다.
 
-### 잘형 안전성을 보강한 TCP 소켓
+### 자료형 안전성을 보강한 TCP 소켓
+
+    class SocketUtil;
+    class TCPSocket;
+
+    using TCPSocketPtr = shared_ptr<TCPSocket>;
+
+    class TCPSocket
+    {
+    public:
+        ~TCPSocket();
+        int		    Connect(const SocketAddress& inAddress);
+        int		    Bind(const SocketAddress& inBindAddress);
+        int		    Listen(int inBackLog = 32);
+        TCPSocketPtr    Accept(SocketAddress& inFromAddress);
+        int		    Send(const void* inData, int inLen);
+        int		    Receive(void* inBuffer, int inLen);
+    private:
+        friend class SocketUtil;
+        TCPSocket(SOCKET inSocket) : mSocket(inSocket) {}
+        SOCKET mSocket;
+    };
+
+    int TCPSocket::Connect(const SocketAddress & inAddress)
+    {
+        int err = connect(this->mSocket, &inAddress.mSockAddr, inAddress.GetSize());
+        if (err >= 0)
+            return NO_ERROR;
+
+        SocketUtil::SU_ReportError(L"TCPSocket::Connet");
+        return -SocketUtil::SU_GetLastError();
+    }
+
+    int TCPSocket::Bind(const SocketAddress & inBindAddress)
+    {
+        int err = bind(this->mSocket, &inBindAddress.mSockAddr, inBindAddress.GetSize());
+
+        if (err == 0)
+            return NO_ERROR;
+
+        SocketUtil::SU_ReportError(L"UDPSocket::bind");
+        return SocketUtil::SU_GetLastError();
+    }
+
+    int TCPSocket::Listen(int inBackLog)
+    {
+        int err = listen(this->mSocket, inBackLog);
+
+        if (err >= 0)
+            return NO_ERROR;
+
+        SocketUtil::SU_ReportError(L"TCPSocket::Listen");
+        return -SocketUtil::SU_GetLastError();
+    }
+
+    TCPSocketPtr TCPSocket::Accept(SocketAddress & inFromAddress)
+    {
+        int length = inFromAddress.GetSize();
+        SOCKET newSocket = accept(mSocket, &inFromAddress.mSockAddr, &length);
+
+        if (newSocket != INVALID_SOCKET) 
+            return TCPSocketPtr(new TCPSocket(newSocket));
+
+        SocketUtil::SU_ReportError(L"TCPSocket::Accept");
+        return nullptr;
+    }
+
+
+    int TCPSocket::Send(const void * inData, int inLen)
+    {
+        int byteSentCount = send(this->mSocket, 
+            static_cast<const char*>(inData), inLen, 0);
+        
+        if (byteSentCount >= 0)
+            return byteSentCount;
+
+        SocketUtil::SU_ReportError(L"TCPSocekt::Send");
+        return -SocketUtil::SU_GetLastError();
+    }
+
+    int TCPSocket::Receive(void * inBuffer, int inLen)
+    {
+        int byteReceivedCount = recv(mSocket, 
+            static_cast<char*>(inBuffer), inLen, 0);
+
+        if (byteReceivedCount >= 0)
+            return byteReceivedCount;
+
+        SocketUtil::SU_ReportError(L"TCPSoket::Receive");
+        return -SocketUtil::SU_GetLastError();
+
+    }
+
+    TCPSocket::~TCPSocket()
+    {
+        closesocket(this->mSocket);
+    }

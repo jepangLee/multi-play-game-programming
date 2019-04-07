@@ -155,6 +155,8 @@
 
 ### UDP 소켓 자료형 안전성 보강
 
+    class SocketUtil;
+
     class UDPSocket
     {
     public:
