@@ -1,4 +1,6 @@
-#pragma once
+#ifndef	SOCKET_UTIL_H
+#define SOCKET_UTIL_H
+
 #include "UDPSocket.h"
 #include "TCPSocket.h"
 
@@ -14,8 +16,9 @@ public:
 	static void SU_ReportError(const wchar_t *errorCode);
 	static void SU_ReportError(const char *errorCode);
 	static int SU_GetLastError();
-private:
-
-	UDPSocketPtr CreateUDPSocket(SocketAddressFamily inFamily);
-	TCPSocketPtr CreateTCPSocket(SocketAddressFamily inFamily);
+	static UDPSocketPtr CreateUDPSocket(SocketAddressFamily inFamily);
+	static TCPSocketPtr CreateTCPSocket(SocketAddressFamily inFamily);
 };
+
+#endif // SOCKETUTIL_H
+

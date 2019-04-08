@@ -15,7 +15,7 @@ void SocketUtil::SU_ReportError(const char *errorCode)
 }
 
 int SocketUtil::SU_GetLastError() {
-#if defined( WIN32 )
+#if _WIN32
 	return WSAGetLastError();
 #else
 	return errno;
@@ -29,7 +29,7 @@ UDPSocketPtr SocketUtil::CreateUDPSocket(SocketAddressFamily inFamily)
 	if (INVALID_SOCKET != s)
 		return UDPSocketPtr(new UDPSocket(s));
 
-	this->SU_ReportError(L"SocketUtil::CreateUDPSocket");
+	SocketUtil::SU_ReportError(L"SocketUtil::CreateUDPSocket");
 	return nullptr;
 
 }
@@ -40,7 +40,27 @@ TCPSocketPtr SocketUtil::CreateTCPSocket(SocketAddressFamily inFamily)
 	if (INVALID_SOCKET != s)
 		return TCPSocketPtr(new TCPSocket(s));
 
-	this->SU_ReportError(L"SocketUtil::CreateUDPSocket");
+	SocketUtil::SU_ReportError(L"SocketUtil::CreateUDPSocket");
 	return nullptr;
 
 }
+
+//void DoUDPLoop() {
+//	UDPSocketPtr mySock = SocketUtil::CreateUDPSocket(INET);
+//	mySock->SetNonBlockingMode(true);
+//
+//	bool gIsGamerunning = true;
+//
+//	while (gIsGamerunning) {
+//		char data[1500];
+//		SocketAddress socketAddress;
+//
+//		int bytesReceived = mySock->
+//			ReceiveFrom(data, sizeof(data), socketAddress);
+//		
+//		if (bytesReceived > 0)
+//			ProcessReceivedData(data, socketAddress);
+//	
+//		DoGameFrame()
+//	}
+//}

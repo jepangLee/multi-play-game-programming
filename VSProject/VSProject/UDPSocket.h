@@ -12,7 +12,7 @@ public:
 	int Bind(const SocketAddress& inBindAddress);
 	int SendTo(const void* inData, int inLen, const SocketAddress& inTo);
 	int ReceiveFrom(void* inBuffer, int inMaxLengh, SocketAddress& outFrom);
-	
+	int SetNonBlockingMode(bool inShouldBenonBlocking);
 	~UDPSocket();
 private:
 	friend class SocketUtil;
