@@ -51,7 +51,6 @@ TCPSocketPtr TCPSocket::Accept(SocketAddress & inFromAddress)
 	return nullptr;
 }
 
-
 int TCPSocket::Send(const void * inData, int inLen)
 {
 	int byteSentCount = send(this->mSocket, 

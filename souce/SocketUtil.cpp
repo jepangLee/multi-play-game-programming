@@ -7,6 +7,7 @@ void SocketUtil::SU_ReportError(const wchar_t *errorCode)
 	fputc('\n', stderr);
 	exit(1);
 }
+
 void SocketUtil::SU_ReportError(const char *errorCode)
 {
 	fputs(errorCode, stderr);
@@ -45,7 +46,42 @@ TCPSocketPtr SocketUtil::CreateTCPSocket(SocketAddressFamily inFamily)
 
 }
 
-//void DoUDPLoop() {
+fd_set* SocketUtil::FillSetFromVector(fd_set & outSet, const vector<TCPSocketPtr>* inSockets)
+{
+	if (inSockets) {
+		FD_ZERO(&outSet);
+		for (const TCPSocketPtr& socket : *inSockets) {
+			FD_SET(socket->mSocket, &outSet);
+		}
+		return &outSet;
+	}
+	else return nullptr;
+}
+
+fd_set* SocketUtil::FillVectorFromSet(
+	vector<TCPSocketPtr>* outSockets, 
+	const vector<TCPSocketPtr>* inSockets, 
+	const fd_set & inSet)
+{
+	if(inSockets->size() && outSockets->size()) {
+		outSockets->clear();
+		for (const TCPSocketPtr& socket : *inSockets) {
+			if (FD_ISSET(socket->mSocket, &inSet)) {
+				outSockets->push_back(socket);
+			}
+		}
+	}
+}
+
+int SocketUtil::Select(
+	const vector<TCPSocketPtr>* inReadSet, vector<TCPSocketPtr> outReadSet, 
+	const vector<TCPSocketPtr>* inWriteSet, vector<TCPSocketPtr> outWriteSet, 
+	const vector<TCPSocketPtr>* inExceptSet, vector<TCPSocketPtr> outExceptSet)
+{
+	////
+}
+
+void DoUDPLoop() {
 //	UDPSocketPtr mySock = SocketUtil::CreateUDPSocket(INET);
 //	mySock->SetNonBlockingMode(true);
 //
@@ -63,4 +99,4 @@ TCPSocketPtr SocketUtil::CreateTCPSocket(SocketAddressFamily inFamily)
 //	
 //		DoGameFrame()
 //	}
-//}
+}
