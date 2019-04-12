@@ -8,7 +8,6 @@ class SocketAddress
 {
 public:
 	SocketAddress(uint32_t inAddress, uint16_t inPort);
-	SocketAddress(PCWSTR inAddress, uint16_t inPort);
 	SocketAddress(const sockaddr& inSockAddr);
 	SocketAddress();
 	size_t GetSize() const;

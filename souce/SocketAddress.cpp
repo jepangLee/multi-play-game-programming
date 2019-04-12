@@ -7,14 +7,6 @@ SocketAddress::SocketAddress(uint32_t inAddress, uint16_t inPort)
 	this->GetAsSockAddrIn()->sin_addr.S_un.S_addr = htonl(inAddress);
 	this->GetAsSockAddrIn()->sin_port = htons(inPort);
 }
-
-SocketAddress::SocketAddress(PCWSTR inAddress, uint16_t inPort)
-{
-	this->GetAsSockAddrIn()->sin_family = AF_INET;
-	InetPton(AF_INET, inAddress, &GetAsSockAddrIn()->sin_addr);
-	this->GetAsSockAddrIn()->sin_port = htons(inPort);
-}
-
 SocketAddress::SocketAddress(const sockaddr & inSockAddr)
 {
 	memcpy(&mSockAddr, &inSockAddr, sizeof(sockaddr));
