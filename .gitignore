@@ -347,4 +347,9 @@ healthchecksdb
 # Backup folder for Package Reference Convert tool in Visual Studio 2017
 MigrationBackup/
 
+/multi-play-game-programming.sln
+/multi-play-game-programming.vcxproj
+/multi-play-game-programming.vcxproj.filters
+/multi-play-game-programming.vcxproj.user
+
 # End of https://www.gitignore.io/api/visualstudio
