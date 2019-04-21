@@ -22,16 +22,16 @@ SocketAddressPtr SocketAddressPactory::CreateIPv4FromString(const string & inStr
 	int error = getaddrinfo((PCSTR)&host, (PCSTR)&service, &hint, &result);
 	addrinfo* initResult = result;
 
-	if (NULL != error && nullptr != result) {
+	if (0 != error && nullptr != result) {
 		freeaddrinfo(initResult);
 		return nullptr;
 	}
 
-	while (NULL == (result->ai_addr && result->ai_next)) {
+	while (!result->ai_addr && result->ai_next) {
 		result = result->ai_next;
 	}
 
-	if (NULL == result->ai_addr) {
+	if (!result->ai_addr) {
 		freeaddrinfo(initResult);
 		return nullptr;
 	}

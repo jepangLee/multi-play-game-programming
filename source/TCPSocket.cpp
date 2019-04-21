@@ -4,12 +4,12 @@
 
 TCPSocket::~TCPSocket()
 {
-	closesocket(this->mSocket);
+	closesocket(mSocket);
 }
 
 int TCPSocket::Connect(const SocketAddress & inAddress)
 {
-	int err = connect(this->mSocket, &inAddress.mSockAddr, inAddress.GetSize());
+	int err = connect(mSocket, &inAddress.mSockAddr, inAddress.GetSize());
 	if (err >= 0)
 		return NO_ERROR;
 
@@ -19,7 +19,7 @@ int TCPSocket::Connect(const SocketAddress & inAddress)
 
 int TCPSocket::Bind(const SocketAddress & inBindAddress)
 {
-	int err = bind(this->mSocket, &inBindAddress.mSockAddr, inBindAddress.GetSize());
+	int err = bind(mSocket, &inBindAddress.mSockAddr, inBindAddress.GetSize());
 
 	if (err == 0)
 		return NO_ERROR;
@@ -30,7 +30,7 @@ int TCPSocket::Bind(const SocketAddress & inBindAddress)
 
 int TCPSocket::Listen(int inBackLog)
 {
-	int err = listen(this->mSocket, inBackLog);
+	int err = listen(mSocket, inBackLog);
 
 	if (err >= 0)
 		return NO_ERROR;
@@ -53,7 +53,7 @@ TCPSocketPtr TCPSocket::Accept(SocketAddress & inFromAddress)
 
 int TCPSocket::Send(const void * inData, int inLen)
 {
-	int byteSentCount = send(this->mSocket, 
+	int byteSentCount = send(mSocket, 
 		static_cast<const char*>(inData), inLen, 0);
 	
 	if (byteSentCount >= 0)

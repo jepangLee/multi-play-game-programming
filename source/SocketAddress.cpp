@@ -3,9 +3,9 @@
 
 SocketAddress::SocketAddress(uint32_t inAddress, uint16_t inPort)
 {
-	this->GetAsSockAddrIn()->sin_family = AF_INET;
-	this->GetAsSockAddrIn()->sin_addr.S_un.S_addr = htonl(inAddress);
-	this->GetAsSockAddrIn()->sin_port = htons(inPort);
+	GetAsSockAddrIn()->sin_family = AF_INET;
+	GetAsSockAddrIn()->sin_addr.S_un.S_addr = htonl(inAddress);
+	GetAsSockAddrIn()->sin_port = htons(inPort);
 }
 SocketAddress::SocketAddress(const sockaddr & inSockAddr)
 {
@@ -17,7 +17,7 @@ size_t SocketAddress::GetSize() const
 	return sizeof(sockaddr);
 }
 
-sockaddr_in * SocketAddress::GetAsSockAddrIn()
+sockaddr_in *SocketAddress::GetAsSockAddrIn()
 {
 	return reinterpret_cast<sockaddr_in*>(&mSockAddr);
 }

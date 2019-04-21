@@ -9,7 +9,7 @@ class SocketAddress
 public:
 	SocketAddress(uint32_t inAddress, uint16_t inPort);
 	SocketAddress(const sockaddr& inSockAddr);
-	SocketAddress();
+	SocketAddress() = delete;
 	size_t GetSize() const;
 
 private:

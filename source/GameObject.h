@@ -4,9 +4,9 @@
 class GameObject
 {
 public:
-	GameObject() : name(NULL) {}
+	GameObject() {}
 private:
-	string name;
+	
 };
 
 
