@@ -20,7 +20,9 @@ public:
 	uint32_t GetRemainingDataSize() const { return mCapacity - mHead; }
 
 	template<class T>
-	void Read(T& outData) { Read(&outData, sizeof(outData)); }
+	void Read(T& outData) {
+		Read(&outData, sizeof(outData));
+	}
 	void Read(void* OutData, uint32_t inByteCount);
 
 private:

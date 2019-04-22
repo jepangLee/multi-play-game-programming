@@ -13,10 +13,10 @@ void RoboCat::Read(InputMemeryStream inStream)
 
 void RoboCat::Write(OutputMemeryStream inStream) const
 {
-	inStream.Write(mHealth);
-	inStream.Write(mMeowCount);
+	//inStream.Write(mHealth);
+	//inStream.Write(mMeowCount);
 	//mHomeBase
-	inStream.Write(mName, 128);
+	//inStream.Write(mName, 128);
 	//mMiceIndices
 }
 

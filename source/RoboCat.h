@@ -1,5 +1,6 @@
 #ifndef ROBOCAT_H
 #define ROBOCAT_H
+#include "GameObject.h"
 #include "InputMemeryStream.h"
 #include "OutputMemeryStream.h"
 
