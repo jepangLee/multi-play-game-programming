@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "RoboCat.h"
 #include "GameObject.h"
 
@@ -11,16 +10,16 @@ void RoboCat::Read(InputMemeryStream inStream)
 	//mMiceIndices
 }
 
-void RoboCat::Write(OutputMemeryStream inStream) const
+void RoboCat::Write(OutputMemoryStream inStream) const
 {
-	//inStream.Write(mHealth);
-	//inStream.Write(mMeowCount);
+	inStream.Write(mHealth);
+	inStream.Write(mMeowCount);
 	//mHomeBase
-	//inStream.Write(mName, 128);
+	inStream.Write(mName, 128);
 	//mMiceIndices
 }
 
-void RoboCat::SendRoboCat(int inSocket, OutputMemeryStream stream) {
+void RoboCat::SendRoboCat(int inSocket, OutputMemoryStream stream) {
 	Write(stream);
 	send(inSocket, stream.GetBugfferPtr(), stream.GetLength(), 0);
 }

@@ -1,8 +1,10 @@
 #ifndef ROBOCAT_H
 #define ROBOCAT_H
+
+#include "../pch.h"
 #include "GameObject.h"
-#include "InputMemeryStream.h"
-#include "OutputMemeryStream.h"
+#include "../MemoryStream/InputMemeryStream.h"
+#include "../MemoryStream/OutputMemeryStream.h"
 
 const int MaxPacketSize = 1470;
 
@@ -15,9 +17,9 @@ public:
 	}
 
 	void Read(InputMemeryStream inStream);
-	void Write(OutputMemeryStream inStream) const;
+	void Write(OutputMemoryStream inStream) const;
 
-	void SendRoboCat(int inSocket, OutputMemeryStream stream);
+	void SendRoboCat(int inSocket, OutputMemoryStream stream);
 	void ReceiveCRoboCat(int inSocket);
 	
 private:

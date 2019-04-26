@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "SocketUtil.h"
 
 void SocketUtil::SU_ReportError(const wchar_t *errorCode)

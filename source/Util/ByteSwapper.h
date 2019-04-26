@@ -1,8 +1,7 @@
 #ifndef BYTE_SWAPPER_H
 #define BYTE_SWAPPER_H
 
-
-#include "pch.h"
+#include "../pch.h"
 #include "TypeAliaser.h"
 
 template<class T, size_t tSize> class ByteSwapper;
@@ -55,5 +54,4 @@ template<class T>
 T ByteSwap(T inData) {
 	return ByteSwapper<T, sizeof(T)>().Swap(inData);
 }
-
 #endif

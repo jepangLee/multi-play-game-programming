@@ -1,6 +1,7 @@
 #ifndef TCP_SOCKET_H
 #define TCP_SOCKET_H
 
+#include "../pch.h"
 #include "SocketAddress.h"
 
 class SocketUtil;

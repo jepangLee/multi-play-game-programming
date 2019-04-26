@@ -1,5 +1,7 @@
-#ifndef GAMEOBJECT_H
-#define GAMEOBJECT_H
+#ifndef GAME_OBJECT_H
+#define GAME_OBJECT_H
+
+#include "../pch.h"
 
 class GameObject
 {

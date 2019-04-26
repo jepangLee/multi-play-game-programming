@@ -1,8 +1,9 @@
 #ifndef	SOCKET_UTIL_H
 #define SOCKET_UTIL_H
 
-#include "UDPSocket.h"
-#include "TCPSocket.h"
+#include "../pch.h"
+#include "../socket/UDPSocket.h"
+#include "../socket/TCPSocket.h"
 
 enum SocketAddressFamily {
 	INET = AF_INET,
