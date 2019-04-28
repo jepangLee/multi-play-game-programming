@@ -17,8 +17,19 @@ public:
 	void WriteBits(uint8_t inData, size_t inBitCount);
 
 	template<class T>
-	void WriteByte(T inData, size_t inByteCount);
+	void WriteByte(T inData, size_t inBitCount = sizeof(T) * 8)
+	{
+		static_assert(
+			is_arithmetic<T>::value ||
+			is_enum<T>::value,
+			"Generic write only supoort primitive data types");
 
+		WriteBits(&inData, inBitCount)
+	}
+	template<>
+	void WriteByte(bool inData, size_t inBitCount = 1) {
+		WriteBits(inData, 1);
+	}
 	const char* GetBufferPtr() const { return mBuffer; }
 	uint32_t GetBitLength() const { return mBitHead; }
 	uint32_t GetBitCapacity() const { return mBitCapacity; }
