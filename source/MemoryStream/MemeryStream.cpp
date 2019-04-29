@@ -1,4 +1,4 @@
-#include "OutputMemeryStream.h"
+#include "MemeryStream.h"
 
 void OutputMemoryStream::ReallocBuffer(uint32_t inNewLength)
 {
@@ -21,5 +21,18 @@ void OutputMemoryStream::Write(const void* inData, size_t inByteCount)
 
 	memcpy(mBuffer + mHead, inData, inByteCount);
 	mHead = resultHead;
+}
+
+//-------------------------------------------------------------------------
+
+void InputMemeryStream::Read(void* OutData, uint32_t inByteCount)
+{
+	if (inByteCount <=
+		static_cast<uint32_t>(_msize(mBuffer + mHead))) {
+		memcpy(OutData, mBuffer + mHead, inByteCount);
+		mHead += inByteCount;
+	}
+
+
 }
 
