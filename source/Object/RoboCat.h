@@ -3,8 +3,7 @@
 
 #include "../pch.h"
 #include "GameObject.h"
-#include "../MemoryStream/InputMemeryStream.h"
-#include "../MemoryStream/OutputMemeryStream.h"
+#include "../MemoryStream/MemeryStream.h"
 
 const int MaxPacketSize = 1470;
 

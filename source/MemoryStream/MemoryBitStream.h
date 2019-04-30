@@ -26,8 +26,9 @@ public:
 			is_enum<T>::value,
 			"Generic write only supoort primitive data types");
 
-		WriteBits(&inData, inBitCount)
+		WriteBits(&inData, inBitCount);
 	}
+	
 	template<class T>
 	void Write(const vector<T>& inVector) {
 		size_t elementCount = inVector.size();
@@ -36,6 +37,7 @@ public:
 			Write(element);
 		}
 	}
+	
 	template<>
 	void Write(bool inData, size_t inBitCount) {
 		WriteBits(inData, 1);
@@ -74,7 +76,7 @@ public:
 
 	void ReadBits(void* outData, uint32_t inBitCount);
 	void ReadBits(uint8_t outData, size_t inBitCount);
-
+	
 	void ReadBytes(void* outData, uint32_t inByteCount);
 
 	template<class T>
@@ -85,12 +87,12 @@ public:
 			is_enum<T>::value,
 			"Generic write only supoort primitive data types");
 
-		ReadBits(&outData, inBitCount)
+		ReadBits(&outData, inBitCount);
 	}
 	template<class T>
 	void Read(vector<T>& outVector) {
 		size_t elementCount;
-		read(elementCount);
+		Read(elementCount);
 		outVector.resize(elementCount);
 		for (T& element : outVector) {
 			Read(element);
