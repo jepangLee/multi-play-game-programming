@@ -12,6 +12,7 @@
 #include <WS2tcpip.h>
 #include <Windows.h>
 #include <vector>
+#include <unordered_map>
 typedef int socklen_t;
 //typedef char* receiveBufer_t;
 
@@ -22,6 +23,7 @@ typedef int socklen_t;
 #include <netdb.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <unordered_map>
 
 //typedef void* receiveBufer_t;
 

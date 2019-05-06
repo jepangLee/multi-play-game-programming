@@ -2,6 +2,8 @@
 #define MEMORY_BIT_STREAM_H
 
 #include "../pch.h"
+#include "../Object/GameObject.h"
+#include "../Util/LinkingContext.h"
 
 class OutputMemorybitStream
 {
@@ -42,6 +44,12 @@ public:
 	void Write(bool inData, size_t inBitCount) {
 		WriteBits(inData, 1);
 	}
+
+	void Write(GameObject* inGameObject) {
+		LinkingContext mLinkingContext;
+		uint32_t netWorkId = mLinkingContext.GetNetworkId(inGameObject);
+		Write(netWorkId);
+	}
 	
 	const char* GetBufferPtr() const { return mBuffer; }
 	uint32_t GetBitLength() const { return mBitHead; }
@@ -76,7 +84,6 @@ public:
 
 	void ReadBits(void* outData, uint32_t inBitCount);
 	void ReadBits(uint8_t outData, size_t inBitCount);
-	
 	void ReadBytes(void* outData, uint32_t inByteCount);
 
 	template<class T>
@@ -103,12 +110,19 @@ public:
 		ReadBits(outData, 1);	
 	}
 
+	void Read(GameObject*& outGameObject) {
+		LinkingContext mLinkingContext;
+		uint32_t networkId = 0;
+		Read(networkId);
+		outGameObject = mLinkingContext.GetGameObject(networkId);
+	}
 private:
-
+	
 	char* mBuffer;
 	uint32_t mBitHead;
 	uint32_t mBitCapacity;
 	bool mIsBufferOwner;
+
 };
 #endif
 
