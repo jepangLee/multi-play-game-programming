@@ -15,8 +15,10 @@ void RoboCat::Write(OutputMemoryStream inStream) const
 	inStream.Write(mHealth);
 	inStream.Write(mMeowCount);
 	//mHomeBase
-	inStream.Write(mName, 128);
 	//mMiceIndices
+	uint8_t nameLength = static_cast<uint8_t>(strlen(mName));
+	inStream.Write(nameLength);
+	inStream.Write(mName, nameLength);
 }
 
 void RoboCat::SendRoboCat(int inSocket, OutputMemoryStream stream) {

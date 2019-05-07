@@ -20,7 +20,7 @@ void OutputMemorybitStream::WriteBits(const void* inData, uint32_t inBitCount)
 
 	for (; inBitCount > 8; inBitCount -= 8) {
 		WriteBits(*srcByte, 8);
-		++srcByte;	
+		++srcByte;
 	}
 
 	if (inBitCount > 0)
@@ -36,12 +36,9 @@ void OutputMemorybitStream::WriteBits(uint8_t inData, size_t inBitCount)
 	uint32_t byteOffset = mBitHead >> 3; 
 	uint32_t bitOffset = mBitHead & 0x7; 
 
-	
 	uint8_t currentMask = ~(0xff << bitOffset);
 	mBuffer[byteOffset] = (mBuffer[byteOffset] & currentMask)
 		| (inData << bitOffset);
-
-
 	
 	uint32_t bitsFreeThisByte = 8 - bitOffset;
 

@@ -13,11 +13,10 @@ public:
 		ReallocBuffer(256);
 	}
 	~OutputMemorybitStream() { free(mBuffer); }
-
+	 
 
 	void WriteBits(const void* inData, uint32_t inBitCount);
 	void WriteBits(uint8_t inData, size_t inBitCount);
-
 	void WriteBytes(const void* inData, uint32_t inByteCount);
 
 	template<class T>
@@ -50,7 +49,7 @@ public:
 		uint32_t netWorkId = mLinkingContext.GetNetworkId(inGameObject);
 		Write(netWorkId);
 	}
-	
+
 	const char* GetBufferPtr() const { return mBuffer; }
 	uint32_t GetBitLength() const { return mBitHead; }
 	uint32_t GetBitCapacity() const { return mBitCapacity; }
